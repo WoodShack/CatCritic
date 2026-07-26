@@ -1,0 +1,153 @@
+:root {
+    --pink-light: #ffe6f0;
+    --pink-soft: #ffd1e6;
+    --pink-medium: #ff9ec7;
+    --pink-strong: #ff6fa5;
+    --pink-dark: #e0558a;
+    --text-dark: #5a3245;
+}
+
+body {
+    background-color: var(--pink-light);
+    color: var(--text-dark);
+}
+
+.navbar {
+    background-color: var(--pink-strong);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #fff !important;
+    letter-spacing: 0.5px;
+}
+
+.nav-link {
+    color: #fff !important;
+}
+
+.nav-link.active {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.btn-pink {
+    background-color: var(--pink-strong);
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-pink:hover {
+    background-color: var(--pink-dark);
+    color: #fff;
+}
+
+.btn-outline-pink {
+    border: 2px solid var(--pink-strong);
+    color: var(--pink-dark);
+    font-weight: bold;
+    background-color: #fff;
+}
+
+.btn-outline-pink:hover {
+    background-color: var(--pink-strong);
+    color: #fff;
+}
+
+.hero-card {
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--pink-soft), #ffffff);
+    box-shadow: 0 6px 20px rgba(255, 111, 165, 0.25);
+    padding: 50px 40px;
+}
+
+.card-panel {
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 4px 15px rgba(255, 111, 165, 0.15);
+    padding: 30px;
+}
+
+.cat-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(255, 111, 165, 0.2);
+    transition: transform 0.2s;
+    margin-bottom: 24px;
+    border: 1px solid var(--pink-soft);
+}
+
+.cat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(255, 111, 165, 0.3);
+}
+
+.cat-photo {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    background-color: var(--pink-light);
+}
+
+.badge-pink {
+    background-color: var(--pink-medium);
+    color: #fff;
+}
+
+.form-label {
+    color: var(--text-dark);
+    font-weight: bold;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--pink-strong);
+    box-shadow: 0 0 0 0.2rem rgba(255, 111, 165, 0.25);
+}
+
+a {
+    color: var(--pink-dark);
+}
+
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 2px;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 1.4rem;
+    color: #e0d3da;
+    cursor: pointer;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: var(--pink-strong);
+}
+
+.stars-display {
+    color: var(--pink-strong);
+}
+
+.page-link {
+    color: var(--pink-dark);
+}
+
+.page-item.active .page-link {
+    background-color: var(--pink-strong);
+    border-color: var(--pink-strong);
+}
+
+.footer-note {
+    color: var(--pink-dark);
+}

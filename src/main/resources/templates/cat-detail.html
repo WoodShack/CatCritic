@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${cat.name} + ' - CatCritic'">Cat - CatCritic</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<nav th:replace="~{fragment/navbar :: navbar}"></nav>
+
+<main class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="alert alert-success text-center fw-bold">
+                🎉 Your cat has been submitted successfully!
+            </div>
+            <div class="card-panel">
+                <img th:src="${cat.imageUrl}" th:alt="${cat.name}" class="cat-photo rounded mb-3">
+                <h2 class="fw-bold" th:text="${cat.name}">Mittens</h2>
+                <p class="mb-1">
+                    <span class="badge badge-pink me-2" th:text="${cat.breed.label}">Breed</span>
+                    <span class="text-muted" th:text="${cat.age} + ' years old'">3 years old</span>
+                </p>
+                <p class="mb-2">
+                    <span class="stars-display">
+                        <span th:each="i : ${#numbers.sequence(1, 10)}"
+                              th:text="${i <= cat.roundedRating} ? '★' : '☆'"></span>
+                    </span>
+                    <span class="text-muted small"
+                          th:text="${cat.ratingCount == 0} ? 'Not yet rated' : (${#numbers.formatDecimal(cat.averageRating, 1, 1)} + ' / 10 (' + ${cat.ratingCount} + ' ratings)')">
+                        Not yet rated
+                    </span>
+                </p>
+                <p th:text="${cat.description}">Description</p>
+                <p class="text-muted small" th:if="${cat.ownerUsername != null}"
+                   th:text="'Submitted by ' + ${cat.ownerUsername}">Submitted by user</p>
+
+                <div class="d-flex gap-2 mt-3">
+                    <a th:href="@{/cats}" class="btn btn-pink flex-grow-1">Browse All Cats</a>
+                    <a th:href="@{/cats/new}" class="btn btn-outline-pink flex-grow-1">Submit Another</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
