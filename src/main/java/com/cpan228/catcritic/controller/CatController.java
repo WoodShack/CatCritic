@@ -2,8 +2,10 @@ package com.cpan228.catcritic.controller;
 
 import com.cpan228.catcritic.model.Breed;
 import com.cpan228.catcritic.model.Cat;
+import com.cpan228.catcritic.model.Rating;
 import com.cpan228.catcritic.service.CatService;
 import com.cpan228.catcritic.service.RatingService;
+
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -21,7 +23,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class CatController {
@@ -49,7 +56,7 @@ public class CatController {
 
     @PostMapping("/cats/new")
     public String submitCat(@Valid @ModelAttribute("cat") Cat cat, BindingResult result,
-                             @RequestParam("photo") MultipartFile photo, Model model, HttpSession session) {
+            @RequestParam("photo") MultipartFile photo, Model model, HttpSession session) {
         String username = (String) session.getAttribute(AuthController.SESSION_USERNAME);
         if (username == null) {
             return "redirect:/login";
@@ -77,12 +84,23 @@ public class CatController {
     }
 
     @GetMapping("/cats/{id}")
-    public String showCat(@PathVariable Long id, Model model) {
+    public String showCat(@PathVariable Long id, Model model, HttpSession session) {
         Cat cat = catService.getCatById(id);
         if (cat == null) {
             return "redirect:/cats";
         }
+
+        String username = (String) session.getAttribute("username");
+        boolean loggedIn = username != null;
+
+        Rating userRating = null;
+        if (loggedIn) {
+            userRating = ratingService.getUserRatingForCat(cat.getId(), username);
+        }
+
         model.addAttribute("cat", cat);
+        model.addAttribute("loggedIn", loggedIn);
+        model.addAttribute("userRating", userRating);
         return "cat-detail";
     }
 
@@ -129,19 +147,36 @@ public class CatController {
         model.addAttribute("minAge", minAge);
         model.addAttribute("breeds", Breed.values());
         model.addAttribute("loggedIn", session.getAttribute(AuthController.SESSION_USERNAME) != null);
+        
+        
+
+        String username = (String) session.getAttribute(AuthController.SESSION_USERNAME);
+        model.addAttribute("loggedIn", username != null);
+
+if (username != null) {
+    List<Cat> cats = catPage.getContent();
+    Map<Long, Integer> myRatings = new HashMap<>();
+    for (Cat cat : cats) {
+        Rating rating = ratingService.getUserRatingForCat(cat.getId(), username);
+        if (rating != null) {
+            myRatings.put(cat.getId(), rating.getStars());
+        }
+    }
+    model.addAttribute("myRatings", myRatings);
+}
 
         return "browse";
     }
 
     @PostMapping("/cats/{id}/rate")
     public String rateCat(@PathVariable Long id, @RequestParam int stars,
-                           @RequestParam(defaultValue = "0") int page,
-                           @RequestParam(defaultValue = "6") int size,
-                           @RequestParam(defaultValue = "createdAt") String sort,
-                           @RequestParam(defaultValue = "DESC") String direction,
-                           @RequestParam(required = false) String breed,
-                           @RequestParam(required = false) Integer minAge,
-                           HttpSession session) {
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size,
+            @RequestParam(defaultValue = "createdAt") String sort,
+            @RequestParam(defaultValue = "DESC") String direction,
+            @RequestParam(required = false) String breed,
+            @RequestParam(required = false) Integer minAge,
+            HttpSession session) {
         Cat cat = catService.getCatById(id);
         if (cat != null && stars >= 1 && stars <= 10) {
             String username = (String) session.getAttribute(AuthController.SESSION_USERNAME);

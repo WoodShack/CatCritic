@@ -1,72 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
 :root {
-    --pink-light: #ffe6f0;
-    --pink-soft: #ffd1e6;
-    --pink-medium: #ff9ec7;
-    --pink-strong: #ff6fa5;
-    --pink-dark: #e0558a;
-    --text-dark: #5a3245;
+    --amber-light: #fff8ee;
+    --amber-soft: #ffe9c5;
+    --amber-medium: #ffb347;
+    --amber-strong: #e8831a;
+    --amber-dark: #b85e0a;
+    --text-dark: #3d2b0e;
 }
 
 body {
-    background-color: var(--pink-light);
+    background-color: var(--amber-light);
     color: var(--text-dark);
+    font-family: 'Nunito', sans-serif;
+}
+
+a {
+    color: var(--amber-dark);
 }
 
 .navbar {
-    background-color: var(--pink-strong);
+    background-color: var(--amber-strong);
 }
 
 .navbar-brand {
-    font-weight: bold;
+    font-weight: 800;
     color: #fff !important;
     letter-spacing: 0.5px;
+    font-size: 1.3rem;
 }
 
 .nav-link {
     color: #fff !important;
+    font-weight: 600;
 }
 
 .nav-link.active {
-    font-weight: bold;
+    font-weight: 800;
     text-decoration: underline;
 }
 
-.btn-pink {
-    background-color: var(--pink-strong);
+.btn-amber {
+    background-color: var(--amber-strong);
     color: #fff;
-    font-weight: bold;
+    font-weight: 700;
     border: none;
+    border-radius: 10px;
     transition: all 0.2s;
 }
 
-.btn-pink:hover {
-    background-color: var(--pink-dark);
+.btn-amber:hover {
+    background-color: var(--amber-dark);
     color: #fff;
 }
 
-.btn-outline-pink {
-    border: 2px solid var(--pink-strong);
-    color: var(--pink-dark);
-    font-weight: bold;
+.btn-outline-amber {
+    border: 2px solid var(--amber-strong);
+    color: var(--amber-dark);
+    font-weight: 700;
     background-color: #fff;
+    border-radius: 10px;
 }
 
-.btn-outline-pink:hover {
-    background-color: var(--pink-strong);
+.btn-outline-amber:hover {
+    background-color: var(--amber-strong);
     color: #fff;
 }
 
 .hero-card {
     border-radius: 20px;
-    background: linear-gradient(135deg, var(--pink-soft), #ffffff);
-    box-shadow: 0 6px 20px rgba(255, 111, 165, 0.25);
+    background: linear-gradient(135deg, var(--amber-soft), #ffffff);
+    box-shadow: 0 6px 20px rgba(232, 131, 26, 0.2);
     padding: 50px 40px;
 }
 
 .card-panel {
     border-radius: 16px;
     background: #fff;
-    box-shadow: 0 4px 15px rgba(255, 111, 165, 0.15);
+    box-shadow: 0 4px 15px rgba(232, 131, 26, 0.12);
     padding: 30px;
 }
 
@@ -74,42 +85,40 @@ body {
     border-radius: 16px;
     overflow: hidden;
     background: #fff;
-    box-shadow: 0 4px 10px rgba(255, 111, 165, 0.2);
+    box-shadow: 0 4px 10px rgba(232, 131, 26, 0.15);
     transition: transform 0.2s;
     margin-bottom: 24px;
-    border: 1px solid var(--pink-soft);
+    border: 1px solid var(--amber-soft);
 }
 
 .cat-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(255, 111, 165, 0.3);
+    box-shadow: 0 10px 20px rgba(232, 131, 26, 0.25);
 }
 
 .cat-photo {
     width: 100%;
     height: 220px;
     object-fit: cover;
-    background-color: var(--pink-light);
+    background-color: var(--amber-light);
 }
 
-.badge-pink {
-    background-color: var(--pink-medium);
+.badge-amber {
+    background-color: var(--amber-medium);
     color: #fff;
+    font-weight: 700;
+    border-radius: 8px;
 }
 
 .form-label {
     color: var(--text-dark);
-    font-weight: bold;
+    font-weight: 700;
 }
 
 .form-control:focus,
 .form-select:focus {
-    border-color: var(--pink-strong);
-    box-shadow: 0 0 0 0.2rem rgba(255, 111, 165, 0.25);
-}
-
-a {
-    color: var(--pink-dark);
+    border-color: var(--amber-strong);
+    box-shadow: 0 0 0 0.2rem rgba(232, 131, 26, 0.2);
 }
 
 .star-rating {
@@ -125,29 +134,32 @@ a {
 
 .star-rating label {
     font-size: 1.4rem;
-    color: #e0d3da;
+    color: #d9ccc0;
     cursor: pointer;
+    transition: color 0.15s;
 }
 
 .star-rating input:checked ~ label,
 .star-rating label:hover,
 .star-rating label:hover ~ label {
-    color: var(--pink-strong);
+    color: var(--amber-medium);
 }
 
 .stars-display {
-    color: var(--pink-strong);
+    color: var(--amber-medium);
 }
 
 .page-link {
-    color: var(--pink-dark);
+    color: var(--amber-dark);
 }
 
 .page-item.active .page-link {
-    background-color: var(--pink-strong);
-    border-color: var(--pink-strong);
+    background-color: var(--amber-strong);
+    border-color: var(--amber-strong);
+    color: #fff;
 }
 
 .footer-note {
-    color: var(--pink-dark);
+    color: var(--amber-dark);
+    font-weight: 600;
 }

@@ -1,29 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
 <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark mb-4">
     <div class="container">
-        <a class="navbar-brand" th:href="@{/}">CatCritic</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+        <a class="navbar-brand" th:href="@{/}">🐱 CatCritic</a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-lg-center">
-                <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/cats}">Browse Cats</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/cats/new}">Submit a Cat</a></li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/}"
+                       th:classappend="${#strings.equals(requestURI, '/')} ? 'active'">
+                        Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/cats}"
+                       th:classappend="${requestURI != null and #strings.startsWith(requestURI, '/cats')} ? 'active'">
+                        Browse Cats
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/cats/new}"
+                       th:classappend="${requestURI != null and #strings.equals(requestURI, '/cats/new')} ? 'active'">
+                        Submit a Cat
+                    </a>
+                </li>
+
                 <li class="nav-item" th:if="${session.username == null}">
                     <a class="nav-link" th:href="@{/login}">Login</a>
                 </li>
                 <li class="nav-item" th:if="${session.username == null}">
                     <a class="nav-link" th:href="@{/register}">Register</a>
                 </li>
+
                 <li class="nav-item" th:if="${session.username != null}">
-                    <span class="nav-link" th:text="'Hi, ' + ${session.username}">Hi, user</span>
+                    <span class="nav-link fw-semibold"
+                          th:text="'👋 ' + ${session.username}">
+                        👋 user
+                    </span>
                 </li>
                 <li class="nav-item" th:if="${session.username != null}">
                     <form th:action="@{/logout}" method="POST" class="d-inline">
-                        <button type="submit" class="btn btn-sm btn-outline-pink ms-lg-2">Logout</button>
+                        <button type="submit"
+                                class="btn btn-sm btn-outline-amber ms-lg-2">
+                            Logout
+                        </button>
                     </form>
                 </li>
+
             </ul>
         </div>
     </div>
 </nav>
+
+</body>
+</html>

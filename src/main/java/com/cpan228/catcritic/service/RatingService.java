@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class RatingService {
@@ -19,6 +20,11 @@ public class RatingService {
         this.ratingRepository = ratingRepository;
         this.catRepository = catRepository;
     }
+
+    public Rating getUserRatingForCat(Long catId, String username) {
+    return ratingRepository.findByCatIdAndRaterUsername(catId, username)
+            .orElse(null); 
+}
 
     @Transactional
     public void rateCat(Cat cat, int stars, String raterUsername) {
