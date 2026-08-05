@@ -22,35 +22,32 @@
                     <p class="text-muted mb-0">Log in to rate and submit cats.</p>
                 </div>
 
-                <div class="alert alert-danger"
-                     th:if="${loginError}"
-                     th:text="${loginError}"></div>
+                <div class="alert alert-success" th:if="${param.registered != null}">
+                    Account created! Log in below to get started.
+                </div>
+                <div class="alert alert-success" th:if="${param.logout != null}">
+                    You have been logged out.
+                </div>
+                <div class="alert alert-danger" th:if="${param.error != null}">
+                    Invalid username or password.
+                </div>
 
-                <form th:action="@{/login}" th:object="${loginForm}"
-                      method="POST" novalidate>
+                <form th:action="@{/login}" method="POST" novalidate>
 
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" id="username" th:field="*{username}"
-                               th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'"
+                        <input type="text" id="username" name="username"
                                class="form-control"
                                placeholder="Your username"
-                               autocomplete="username">
-                        <div class="invalid-feedback"
-                             th:if="${#fields.hasErrors('username')}"
-                             th:errors="*{username}"></div>
+                               autocomplete="username" autofocus>
                     </div>
 
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" id="password" th:field="*{password}"
-                               th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"
+                        <input type="password" id="password" name="password"
                                class="form-control"
                                placeholder="Your password"
                                autocomplete="current-password">
-                        <div class="invalid-feedback"
-                             th:if="${#fields.hasErrors('password')}"
-                             th:errors="*{password}"></div>
                     </div>
 
                     <button type="submit" class="btn btn-amber w-100 py-2">

@@ -1,51 +1,62 @@
 package com.cpan228.catcritic.service;
 
+import com.cpan228.catcritic.model.Role;
 import com.cpan228.catcritic.model.User;
 import com.cpan228.catcritic.repository.UserRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
-import java.util.HexFormat;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public boolean usernameExists(String username) {
         return userRepository.existsByUsernameIgnoreCase(username);
     }
 
-   public User register(String username, String rawPassword) {
+    public User register(String username, String rawPassword) {
+
         User user = new User();
+
         user.setUsername(username);
         user.setPasswordHash(passwordEncoder.encode(rawPassword));
+        user.setRole(Role.CAT_VIEWER);
+        user.setEnabled(true);
         user.setCreatedAt(LocalDateTime.now());
+
         return userRepository.save(user);
     }
 
-    public Optional<User> authenticate(String username, String rawPassword) {
-        return userRepository.findByUsernameIgnoreCase(username)
-                .filter(user -> passwordEncoder.matches(rawPassword, user.getPasswordHash()));
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
-    private String hash(String rawPassword) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hashed = digest.digest(rawPassword.getBytes(StandardCharsets.UTF_8));
-            return HexFormat.of().formatHex(hashed);
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException(e);
-        }
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public void changeRole(Long userId, Role newRole) {
+        userRepository.findById(userId)
+                .ifPresent(user -> {
+                    user.setRole(newRole);
+                    userRepository.save(user);
+                });
+    }
+
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
     }
 }

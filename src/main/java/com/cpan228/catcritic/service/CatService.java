@@ -38,6 +38,25 @@ public class CatService {
         return catRepository.save(cat);
     }
 
+    public Cat updateCat(Long id, Cat updates, MultipartFile newPhoto) throws IOException {
+        Cat existing = getCatById(id);
+        if (existing == null) {
+            return null;
+        }
+        existing.setName(updates.getName());
+        existing.setAge(updates.getAge());
+        existing.setBreed(updates.getBreed());
+        existing.setDescription(updates.getDescription());
+        if (newPhoto != null && !newPhoto.isEmpty()) {
+            existing.setImageUrl(storePhoto(newPhoto));
+        }
+        return catRepository.save(existing);
+    }
+
+    public void deleteCat(Long id) {
+        catRepository.deleteById(id);
+    }
+
     public Page<Cat> browse(Breed breed, Integer minAge, Pageable pageable) {
         if (breed != null && minAge != null) {
             return catRepository.findByBreedAndAgeGreaterThanEqual(breed, minAge, pageable);
