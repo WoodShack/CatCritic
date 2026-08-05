@@ -1,6 +1,7 @@
 package com.cpan228.catcritic.model;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -17,4 +18,7 @@ public class RegisterForm {
 
     @NotBlank(message = "Please confirm your password")
     private String confirmPassword;
+
+    @NotNull(message = "Please choose an account type")
+    private Role role = Role.CAT_OWNER;
 }

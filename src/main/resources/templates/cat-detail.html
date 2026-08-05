@@ -16,7 +16,7 @@
         <div class="col-md-7">
 
             <div th:if="${justSubmitted}" class="alert alert-success text-center fw-bold">
-                🎉 Your cat has been submitted successfully!
+                Your cat has been submitted successfully!
             </div>
 
             <div class="card-panel">
@@ -50,21 +50,19 @@
 
                 <p class="text-muted small mb-3"
                    th:if="${cat.ownerUsername != null}"
-                   th:text="'🐾 Submitted by ' + ${cat.ownerUsername}">
-                    🐾 Submitted by user
+                   th:text="'Submitted by ' + ${cat.ownerUsername}">
+                    Submitted by user
                 </p>
 
                 <hr class="my-3">
 
                 <div th:if="${userRating != null}" class="text-center py-2">
                     <span class="badge badge-amber fs-6 px-3 py-2">
-                        ⭐ You rated this cat <strong th:text="${userRating.stars}"></strong>/10
+                        You rated this cat <strong th:text="${userRating.stars}"></strong>/10
                     </span>
                 </div>
 
-               
-
-                <div th:if="${loggedIn and userRating == null}">
+                <div th:if="${userRating == null}">
                     <h6 class="fw-bold mb-2">Rate This Cat</h6>
                     <form th:action="@{/cats/{id}/rate(id=${cat.id})}" method="POST">
                         <div class="star-rating justify-content-center">
@@ -80,17 +78,6 @@
                             Submit Rating
                         </button>
                     </form>
-                </div>
-
-                <div th:if="${!loggedIn}" class="text-center mt-2">
-                    <a th:href="@{/login}" class="btn btn-outline-amber btn-sm">
-                        Log in to Rate
-                    </a>
-                </div>
-
-                <div th:if="${canEdit}" class="text-center mb-3">
-                    <a th:href="@{/cats/{id}/edit(id=${cat.id})}"
-                       class="btn btn-sm btn-outline-amber">✏️ Edit This Cat</a>
                 </div>
 
                 <div class="d-flex gap-2 mt-4">

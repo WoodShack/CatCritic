@@ -17,7 +17,6 @@
             <div class="card-panel">
 
                 <div class="text-center mb-4">
-                    <div class="fs-1">🐾</div>
                     <h2 class="fw-bold mb-1">Join CatCritic</h2>
                     <p class="text-muted mb-0">Create an account to rate and submit cats.</p>
                 </div>
@@ -59,6 +58,27 @@
                         <div class="invalid-feedback"
                              th:if="${#fields.hasErrors('confirmPassword')}"
                              th:errors="*{password}"></div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label d-block">Account Type</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="roleOwner"
+                                   th:field="*{role}" value="CAT_OWNER">
+                            <label class="form-check-label" for="roleOwner">
+                                Cat Owner &mdash; submit cats and rate other cats
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="roleViewer"
+                                   th:field="*{role}" value="CAT_VIEWER">
+                            <label class="form-check-label" for="roleViewer">
+                                Cat Viewer &mdash; rate other cats only
+                            </label>
+                        </div>
+                        <div class="invalid-feedback d-block"
+                             th:if="${#fields.hasErrors('role')}"
+                             th:errors="*{role}"></div>
                     </div>
 
                     <button type="submit" class="btn btn-amber w-100 py-2">

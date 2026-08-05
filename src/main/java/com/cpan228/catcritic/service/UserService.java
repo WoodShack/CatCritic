@@ -3,7 +3,6 @@ package com.cpan228.catcritic.service;
 import com.cpan228.catcritic.model.Role;
 import com.cpan228.catcritic.model.User;
 import com.cpan228.catcritic.repository.UserRepository;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +16,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -27,16 +25,13 @@ public class UserService {
         return userRepository.existsByUsernameIgnoreCase(username);
     }
 
-    public User register(String username, String rawPassword) {
-
+    public User register(String username, String rawPassword, Role role) {
         User user = new User();
-
         user.setUsername(username);
         user.setPasswordHash(passwordEncoder.encode(rawPassword));
-        user.setRole(Role.CAT_VIEWER);
+        user.setRole(role);
         user.setEnabled(true);
         user.setCreatedAt(LocalDateTime.now());
-
         return userRepository.save(user);
     }
 
@@ -48,15 +43,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public void changeRole(Long userId, Role newRole) {
-        userRepository.findById(userId)
-                .ifPresent(user -> {
-                    user.setRole(newRole);
-                    userRepository.save(user);
-                });
-    }
-
-    public void deleteUser(Long userId) {
-        userRepository.deleteById(userId);
+    public void setBanned(Long id, boolean banned) {
+        userRepository.findById(id).ifPresent(user -> {
+            user.setEnabled(!banned);
+            userRepository.save(user);
+        });
     }
 }

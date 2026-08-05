@@ -3,15 +3,18 @@ package com.cpan228.catcritic.service;
 import com.cpan228.catcritic.model.Breed;
 import com.cpan228.catcritic.model.Cat;
 import com.cpan228.catcritic.repository.CatRepository;
+import com.cpan228.catcritic.repository.RatingRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,13 +23,25 @@ public class CatService {
     private static final Path UPLOAD_DIR = Path.of("uploads");
 
     private final CatRepository catRepository;
+    private final RatingRepository ratingRepository;
 
-    public CatService(CatRepository catRepository) {
+    public CatService(CatRepository catRepository, RatingRepository ratingRepository) {
         this.catRepository = catRepository;
+        this.ratingRepository = ratingRepository;
     }
 
     public Cat getCatById(Long id) {
         return catRepository.findById(id).orElse(null);
+    }
+
+    public List<Cat> findAllCats() {
+        return catRepository.findAll();
+    }
+
+    @Transactional
+    public void deleteCat(Long id) {
+        ratingRepository.deleteByCatId(id);
+        catRepository.deleteById(id);
     }
 
     public Cat saveCat(Cat cat, MultipartFile photo, String ownerUsername) throws IOException {
@@ -36,25 +51,6 @@ public class CatService {
         cat.setRatingCount(0);
         cat.setRatingTotal(0);
         return catRepository.save(cat);
-    }
-
-    public Cat updateCat(Long id, Cat updates, MultipartFile newPhoto) throws IOException {
-        Cat existing = getCatById(id);
-        if (existing == null) {
-            return null;
-        }
-        existing.setName(updates.getName());
-        existing.setAge(updates.getAge());
-        existing.setBreed(updates.getBreed());
-        existing.setDescription(updates.getDescription());
-        if (newPhoto != null && !newPhoto.isEmpty()) {
-            existing.setImageUrl(storePhoto(newPhoto));
-        }
-        return catRepository.save(existing);
-    }
-
-    public void deleteCat(Long id) {
-        catRepository.deleteById(id);
     }
 
     public Page<Cat> browse(Breed breed, Integer minAge, Pageable pageable) {

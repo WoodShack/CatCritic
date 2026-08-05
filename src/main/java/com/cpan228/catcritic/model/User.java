@@ -10,13 +10,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +23,6 @@ import java.util.Collection;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -42,35 +38,23 @@ public class User implements UserDetails {
     private String username;
 
     @NotBlank
-    @Column(nullable = false)
     @ToString.Exclude
+    @Column(nullable = false)
     private String passwordHash;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
     @Column(nullable = false)
     private boolean enabled = true;
 
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-
-        if (role == null) {
-            role = Role.CAT_VIEWER;
-        }
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(
-                new SimpleGrantedAuthority(role.getAuthority())
-        );
+        this.createdAt = LocalDateTime.now();
     }
 
     @Override
@@ -79,8 +63,8 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getUsername() {
-        return username;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
@@ -96,22 +80,5 @@ public class User implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public boolean isAdmin() {
-        return role == Role.ADMIN;
-    }
-
-    public boolean isCatOwner() {
-        return role == Role.CAT_OWNER;
-    }
-
-    public boolean canManageCats() {
-        return role == Role.ADMIN || role == Role.CAT_OWNER;
     }
 }

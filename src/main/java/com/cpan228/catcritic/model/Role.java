@@ -1,10 +1,9 @@
 package com.cpan228.catcritic.model;
 
 public enum Role {
-
-    CAT_VIEWER("Cat Viewer"),
+    ADMIN("Admin"),
     CAT_OWNER("Cat Owner"),
-    ADMIN("Administrator");
+    CAT_VIEWER("Cat Viewer");
 
     private final String label;
 
@@ -14,9 +13,5 @@ public enum Role {
 
     public String getLabel() {
         return label;
-    }
-
-    public String getAuthority() {
-        return "ROLE_" + name();
     }
 }

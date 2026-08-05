@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - CatCritic</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .admin-shell {
+            background-color: #1c1f26;
+            border-radius: 16px;
+            padding: 30px;
+            color: #f1f1f1;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .admin-banner {
+            background-color: #7a1f1f;
+            color: #fff;
+            border-radius: 10px;
+            padding: 14px 20px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+        }
+
+        .admin-section-title {
+            color: #fff;
+            border-bottom: 2px solid #7a1f1f;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            font-weight: 800;
+        }
+
+        .admin-table {
+            color: #f1f1f1;
+        }
+
+        .admin-table thead {
+            background-color: #2a2e38;
+        }
+
+        .admin-table td, .admin-table th {
+            vertical-align: middle;
+            border-color: #3a3f4c;
+        }
+
+        .status-active {
+            background-color: #2e7d32;
+        }
+
+        .status-banned {
+            background-color: #7a1f1f;
+        }
+
+        .role-badge {
+            background-color: #3a3f4c;
+        }
+    </style>
+</head>
+<body>
+
+<nav th:replace="~{fragment/navbar :: navbar}"></nav>
+
+<main class="container">
+
+    <div class="admin-shell mb-5">
+        <div class="admin-banner text-center">
+            ADMINISTRATOR CONTROL PANEL &mdash; RESTRICTED ACCESS
+        </div>
+
+        <h4 class="admin-section-title">User Accounts</h4>
+        <div class="table-responsive mb-5">
+            <table class="table admin-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td><span class="badge role-badge" th:text="${user.role.label}"></span></td>
+                    <td>
+                        <span class="badge status-active" th:if="${user.enabled}">Active</span>
+                        <span class="badge status-banned" th:unless="${user.enabled}">Banned</span>
+                    </td>
+                    <td th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td>
+                        <span th:if="${user.username.equalsIgnoreCase(currentUsername)}" class="text-muted small">You</span>
+                        <form th:if="${!user.username.equalsIgnoreCase(currentUsername) and user.enabled}"
+                              th:action="@{/admin/users/{id}/ban(id=${user.id})}"
+                              method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-danger">Ban</button>
+                        </form>
+                        <form th:if="${!user.username.equalsIgnoreCase(currentUsername) and !user.enabled}"
+                              th:action="@{/admin/users/{id}/unban(id=${user.id})}"
+                              method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-light">Unban</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 class="admin-section-title">Cat Submissions</h4>
+        <div class="table-responsive">
+            <table class="table admin-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Breed</th>
+                    <th>Owner</th>
+                    <th>Submitted</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cat : ${cats}">
+                    <td th:text="${cat.id}"></td>
+                    <td th:text="${cat.name}"></td>
+                    <td th:text="${cat.breed.label}"></td>
+                    <td th:text="${cat.ownerUsername}"></td>
+                    <td th:text="${#temporals.format(cat.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td>
+                        <form th:action="@{/admin/cats/{id}/delete(id=${cat.id})}" method="POST"
+                              onsubmit="return confirm('Delete this cat submission? This cannot be undone.');">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

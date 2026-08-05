@@ -1,22 +1,17 @@
 package com.cpan228.catcritic.controller;
 
-import com.cpan228.catcritic.model.Cat;
-import com.cpan228.catcritic.model.Role;
-import com.cpan228.catcritic.model.User;
 import com.cpan228.catcritic.service.CatService;
 import com.cpan228.catcritic.service.UserService;
-
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/admin")
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
     private final UserService userService;
@@ -27,71 +22,33 @@ public class AdminController {
         this.catService = catService;
     }
 
-
     @GetMapping
-    public String dashboard(Model model,
-                            @AuthenticationPrincipal User currentUser) {
-
+    public String dashboard(Model model, Authentication authentication) {
         model.addAttribute("users", userService.findAll());
-
-        model.addAttribute(
-                "cats",
-                catService.browse(
-                        null,
-                        null,
-                        PageRequest.of(
-                                0,
-                                500,
-                                Sort.by("createdAt").descending()
-                        )
-                ).getContent()
-        );
-
-        model.addAttribute("roles", Role.values());
-        model.addAttribute("currentUser", currentUser);
-
-        return "admin/dashboard";
+        model.addAttribute("cats", catService.findAllCats());
+        model.addAttribute("currentUsername", authentication.getName());
+        return "admin";
     }
 
-
-    @PostMapping("/users/{id}/role")
-    public String changeRole(@PathVariable Long id,
-                             @RequestParam Role role) {
-
-        userService.changeRole(id, role);
-
+    @PostMapping("/users/{id}/ban")
+    public String banUser(@PathVariable Long id, Authentication authentication) {
+        userService.findById(id).ifPresent(user -> {
+            if (!user.getUsername().equalsIgnoreCase(authentication.getName())) {
+                userService.setBanned(id, true);
+            }
+        });
         return "redirect:/admin";
     }
 
-
-    @PostMapping("/users/{id}/delete")
-    public String deleteUser(
-            @PathVariable Long id,
-            @AuthenticationPrincipal User currentUser) {
-
-
-        if (currentUser != null &&
-                currentUser.getId().equals(id)) {
-
-            return "redirect:/admin?selfDeleteBlocked";
-        }
-
-
-        userService.deleteUser(id);
-
+    @PostMapping("/users/{id}/unban")
+    public String unbanUser(@PathVariable Long id) {
+        userService.setBanned(id, false);
         return "redirect:/admin";
     }
-
 
     @PostMapping("/cats/{id}/delete")
     public String deleteCat(@PathVariable Long id) {
-
-        Cat cat = catService.getCatById(id);
-
-        if (cat != null) {
-            catService.deleteCat(id);
-        }
-
+        catService.deleteCat(id);
         return "redirect:/admin";
     }
 }

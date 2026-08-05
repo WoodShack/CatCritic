@@ -12,9 +12,4 @@ public class HomeController {
         model.addAttribute("pageTitle", "CatCritic - Show Off Your Cat");
         return "home";
     }
-
-    @GetMapping("/access-denied")
-    public String accessDenied() {
-        return "access-denied";
-    }
 }

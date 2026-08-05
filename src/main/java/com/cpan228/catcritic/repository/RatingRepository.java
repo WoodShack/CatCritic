@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface RatingRepository extends JpaRepository<Rating, Long> {
     Optional<Rating> findByCatIdAndRaterUsername(Long catId, String raterUsername);
+
+    void deleteByCatId(Long catId);
 }

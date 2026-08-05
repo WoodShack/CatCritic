@@ -51,12 +51,12 @@
 
     <div class="row mb-4 align-items-center">
         <div class="col">
-            <h1 class="display-5 fw-bold">🐾 Browse Cats</h1>
+            <h1 class="display-5 fw-bold">Browse Cats</h1>
             <p class="lead text-muted">Look around and rate some cats!</p>
         </div>
         <div class="col-auto text-end" th:if="${totalElements != null}">
             <span class="badge badge-amber fs-6"
-                  th:text="'🐱 ' + ${totalElements} + ' cats'">🐱 0 cats</span>
+                  th:text="${totalElements} + ' cats'">0 cats</span>
         </div>
     </div>
 
@@ -116,7 +116,6 @@
     </div>
 
     <div th:if="${#lists.isEmpty(cats)}" class="text-center my-5 p-5 card-panel">
-        <div class="fs-1 mb-3">🐾</div>
         <h3 class="fw-bold">No Cats Found</h3>
         <p class="text-muted">Try adjusting your filters, or be the first to submit one!</p>
         <a th:href="@{/cats/new}" class="btn btn-amber px-4 mt-2">Submit a Cat</a>
@@ -162,7 +161,7 @@
                     <div th:if="${myRatings != null and myRatings[cat.id] != null}"
                          class="text-center py-2">
                         <span class="badge badge-amber fs-6 px-3 py-2">
-                            ⭐ You rated this cat <strong th:text="${myRatings[cat.id]}"></strong>/10
+                            You rated this cat <strong th:text="${myRatings[cat.id]}"></strong>/10
                         </span>
                         <div class="mt-2">
                             <a th:href="@{/cats/{id}(id=${cat.id})}"
@@ -170,7 +169,7 @@
                         </div>
                     </div>
 
-                    <form th:if="${loggedIn and (myRatings == null or myRatings[cat.id] == null)}"
+                    <form th:if="${myRatings == null or myRatings[cat.id] == null}"
                           th:action="@{/cats/{id}/rate(id=${cat.id})}" method="POST"
                           th:id="'rate-form-' + ${cat.id}"
                           class="rate-form">
@@ -204,12 +203,6 @@
                             Rate This Cat
                         </button>
                     </form>
-
-                    <div th:if="${!loggedIn}" class="text-center mt-2">
-                        <a th:href="@{/login}" class="btn btn-sm btn-outline-amber w-100">
-                            Log in to Rate
-                        </a>
-                    </div>
 
                 </div>
             </div>
