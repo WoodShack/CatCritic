@@ -19,6 +19,23 @@ a {
     color: var(--amber-dark);
 }
 
+nav {
+    overflow: visible;
+    position: relative;
+}
+
+.nav-cat {
+    position: relative;
+    top: 30px;
+    transform-origin: top center;
+    animation: sway 6s ease-in-out infinite;
+}
+
+@keyframes sway {
+    0%, 100% { transform: rotate(-2.5deg); }
+    50%       { transform: rotate(2.5deg); }
+}
+
 .navbar {
     background-color: var(--amber-strong);
 }
