@@ -1,0 +1,19 @@
+# Dev profile overrides — activate with spring.profiles.active=dev
+# This layers on top of application.properties, it doesn't replace it.
+
+server:
+  port: 8082 # different port so I can run this alongside the base config
+
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true # makes the logged SQL readable instead of one long line
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG # helps me debug my controller routes
+    org.hibernate.SQL: DEBUG # shows the actual SQL Hibernate is running
+    com.cpan228.catcritic: DEBUG # verbose logging for my own code
