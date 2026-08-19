@@ -1,81 +1,100 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<body>
-
-<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark mb-4">
-    <div class="container">
-
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <body>
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark mb-4">
+      <div class="container">
         <a class="navbar-brand" th:href="@{/}">CatCritic</a>
 
-        <img th:src="@{/images/navcat.png}" alt="navcat" class="nav-cat" width="125px">
+        <img
+          th:src="@{/images/navcat.png}"
+          alt="navcat"
+          class="nav-cat"
+          width="125px"
+        />
 
-        <button class="navbar-toggler" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav"
-                aria-controls="navbarNav"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-lg-center">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                th:href="@{/}"
+                th:classappend="${#strings.equals(requestURI, '/')} ? 'active'"
+              >
+                Home
+              </a>
+            </li>
 
-                <li class="nav-item">
-                    <a class="nav-link"
-                       th:href="@{/}"
-                       th:classappend="${#strings.equals(requestURI, '/')} ? 'active'">
-                        Home
-                    </a>
-                </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+              <a
+                class="nav-link"
+                th:href="@{/cats}"
+                th:classappend="${requestURI != null and #strings.startsWith(requestURI, '/cats')} ? 'active'"
+              >
+                Browse Cats
+              </a>
+            </li>
 
-                <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link"
-                       th:href="@{/cats}"
-                       th:classappend="${requestURI != null and #strings.startsWith(requestURI, '/cats')} ? 'active'">
-                        Browse Cats
-                    </a>
-                </li>
+            <li
+              class="nav-item"
+              sec:authorize="hasAnyRole('ADMIN','CAT_OWNER')"
+            >
+              <a
+                class="nav-link"
+                th:href="@{/cats/new}"
+                th:classappend="${requestURI != null and #strings.equals(requestURI, '/cats/new')} ? 'active'"
+              >
+                Submit a Cat
+              </a>
+            </li>
 
-                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','CAT_OWNER')">
-                    <a class="nav-link"
-                       th:href="@{/cats/new}"
-                       th:classappend="${requestURI != null and #strings.equals(requestURI, '/cats/new')} ? 'active'">
-                        Submit a Cat
-                    </a>
-                </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+              <a
+                class="nav-link"
+                th:href="@{/admin}"
+                th:classappend="${requestURI != null and #strings.startsWith(requestURI, '/admin')} ? 'active'"
+              >
+                Admin
+              </a>
+            </li>
 
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link"
-                       th:href="@{/admin}"
-                       th:classappend="${requestURI != null and #strings.startsWith(requestURI, '/admin')} ? 'active'">
-                        Admin
-                    </a>
-                </li>
+            <li class="nav-item" sec:authorize="isAnonymous()">
+              <a class="nav-link" th:href="@{/login}">Login</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAnonymous()">
+              <a class="nav-link" th:href="@{/register}">Register</a>
+            </li>
 
-                <li class="nav-item" sec:authorize="isAnonymous()">
-                    <a class="nav-link" th:href="@{/login}">Login</a>
-                </li>
-                <li class="nav-item" sec:authorize="isAnonymous()">
-                    <a class="nav-link" th:href="@{/register}">Register</a>
-                </li>
-
-                <li class="nav-item" sec:authorize="isAuthenticated()">﻿
-                    <span class="nav-link fw-semibold" sec:authentication="name">user</span>
-                </li>
-                <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <form th:action="@{/logout}" method="POST" class="d-inline">
-                        <button type="submit"
-                                class="btn btn-sm btn-outline-amber ms-lg-2">
-                            Logout
-                        </button>
-                    </form>
-                </li>
-
-            </ul>
+            <li
+              class="nav-item d-flex align-items-center gap-2 ms-lg-2"
+              sec:authorize="isAuthenticated()"
+            >
+              <span class="fw-semibold text-white" sec:authentication="name"
+                >user</span
+              >
+              <form th:action="@{/logout}" method="POST">
+                <button type="submit" class="btn btn-sm btn-outline-amber">
+                  Logout
+                </button>
+              </form>
+            </li>
+          </ul>
         </div>
-    </div>
-</nav>
-
-</body>
+      </div>
+    </nav>
+  </body>
 </html>
