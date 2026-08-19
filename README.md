@@ -25,7 +25,7 @@ If you are just running the application locally for the first time, you only nee
 
 CatCritic has two different ways it can run, called profiles. Think of profiles like different modes: one is set up for easy local development and testing, and the other is set up for a real deployment.
 
-Profile 1: dev (Local Development)
+## Profile 1: dev (Local Development)
 This is the default mode. It uses an H2 in-memory database, which means the database lives entirely in memory while the app is running and does not require you to install or configure anything extra. The database is wiped and re-seeded from scratch every time the application restarts.
 
 To start the application in dev mode, open a terminal in the project's root folder and run:
@@ -43,7 +43,7 @@ JDBC URL	jdbc:h2:mem:catcritic
 Username	sa
 Password	(leave blank)
 
-##Profile 2: prod / qa (MySQL)
+## Profile 2: prod / qa (MySQL)
 This mode connects to a real MySQL database and is intended for when the application is being shared with others or deployed to a server. The database is persistent, meaning data is saved between restarts.
 -Log in to MySQL and create a database for the application:
 sql
