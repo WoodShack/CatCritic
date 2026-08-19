@@ -6,9 +6,9 @@ CatCritic is a web application where animal lovers can discover, rate, and share
 ## What does it do?
 Depending on their account type, users can do different things:
 
--Cat Viewer: browse cats
--Cat Owner: browse, rate, upload cats
--Admin: browse, rate, upload cats as well as access admin panel
+-Cat Viewer: browse cats  
+-Cat Owner: browse, rate, upload cats  
+-Admin: browse, rate, upload cats as well as access admin panel  
 
 A default admin account is created automatically when the application starts:
 -Username: admin
