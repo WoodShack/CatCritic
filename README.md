@@ -1,9 +1,9 @@
-##CatCritic
+## CatCritic
 
 
 CatCritic is a web application where animal lovers can discover, rate, and share cats. Registered users can browse cat profiles, leave star ratings, and even submit their own cats to the platform. Each cat profile includes a photo, name, breed, and a short description.
 
-##What does it do?
+## What does it do?
 Depending on their account type, users can do different things:
 
 -Cat Viewer: browse cats
@@ -16,8 +16,8 @@ A default admin account is created automatically when the application starts:
 
 It is strongly recommended to change the admin password before deploying to any environment that is accessible to others.
 
-##Running the Project
-Please make sure you have the following installed on your computer before tryingto run the application:
+## Running the Project
+Please make sure you have the following installed on your computer before trying to run the application:
 Java 17
 Maven
 MySQL
@@ -25,15 +25,14 @@ If you are just running the application locally for the first time, you only nee
 
 CatCritic has two different ways it can run, called profiles. Think of profiles like different modes: one is set up for easy local development and testing, and the other is set up for a real deployment.
 
-Profile 1: dev (Local Development )
-This is the default mode. It uses an H2 in-memory database, which means the database lives entirely in memory while the app is running and does not require you to install or configure anything extra. The database is wiped and re-seeded fromscratch every time the application restarts.
+Profile 1: dev (Local Development)
+This is the default mode. It uses an H2 in-memory database, which means the database lives entirely in memory while the app is running and does not require you to install or configure anything extra. The database is wiped and re-seeded from scratch every time the application restarts.
 
 To start the application in dev mode, open a terminal in the project's root folder and run:
 mvn spring-boot:run
 
 Navigate to your browser of choice and type:
 http://localhost:8081
-
 
 
 You can also inspect the database directly in your browser while the app is running by visiting:
@@ -50,6 +49,7 @@ This mode connects to a real MySQL database and is intended for when the applica
 sql
 CREATE DATABASE catcritic;
 -Rather than typing your database username and password directly into any file, CatCritic reads them from environment variables on your machine. This keeps sensitive credentials out of the project files.
+
 On Mac/Linux, run these in your terminal before starting the app:
 
 export SPRING\_DATASOURCE\_USERNAME=your\_mysql\_usernameexport SPRING\_DATASOURCE\_PASSWORD=your\_mysql\_password
